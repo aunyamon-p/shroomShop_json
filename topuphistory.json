@@ -1,0 +1,14 @@
+[
+    {
+      "id": "1",
+      "via": "Truemoney Wallet",
+      "amount": "200",
+      "date": "22/11/2024"
+    },
+    {
+        "id": "2",
+        "via": "Truemoney Wallet",
+        "amount": "400",
+        "date": "25/11/2024"
+      }
+  ]

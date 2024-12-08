@@ -23,9 +23,7 @@ const saveUsers = (users) => {
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const users = getUsers();
-
     const user = users.find(u => u.username === username && u.password === password);
-
     if (user) {
         return res.json({ message: 'เข้าสู่ระบบสำเร็จ', token: 'sample-token' });
     } else {
@@ -33,19 +31,13 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-
 app.post('/api/register', (req, res) => {
     const { username, password } = req.body;
     const users = getUsers();
-
-   
     const userExists = users.some(u => u.username === username);
-
     if (userExists) {
         return res.status(400).json({ message: 'ชื่อผู้ใช้นี้มีอยู่แล้ว' });
     }
-
-
     const newUser = { username, password };
     users.push(newUser);
     saveUsers(users);
@@ -58,6 +50,36 @@ app.get('/api/product', (req, res) => {
     res.json(products);
 });
 
+app.get('/api/topuphistory', (req, res) => {
+    const topuphtr = JSON.parse(fs.readFileSync('./topuphistory.json', 'utf-8'));
+    res.json(topuphtr);
+});
+
+app.get('/api/buyhistory', (req, res) => {
+    const buyhtr = JSON.parse(fs.readFileSync('./buyhistory.json', 'utf-8'));
+    res.json(buyhtr);
+});
+
+app.get('/api/users', (req, res) => {
+    try {
+        const users = getUsers();
+        res.json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Error fetching users' });
+    }
+});
+
+app.get('/api/products/count', (req, res) => {
+    try {
+        const products = JSON.parse(fs.readFileSync('./product.json', 'utf-8'));
+        const totalProducts = products.length;
+        res.json({ total: totalProducts });
+    } catch (error) {
+        console.error('Error fetching product count:', error);
+        res.status(500).json({ message: 'Error fetching product count' });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
